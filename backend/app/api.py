@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import openai
 
 
 todos = [
@@ -13,6 +14,11 @@ todos = [
     }
 ]
 
+from config import (
+    OPENAI_API
+)
+
+openai.api_key = OPENAI_API
 
 app = FastAPI()
 
@@ -30,6 +36,15 @@ app.add_middleware(
         allow_headers=["*"]
 )
 
+def build_prompt(question: str) -> tuple[str, str]:
+    prompt = f"""
+        Describe the steps of this task: 
+    """.strip()
+    
+    prompt += (
+        question
+    )
+    return prompt
 
 @app.get("/", tags=["root"])
 async def read_root() -> dict:
@@ -43,7 +58,16 @@ async def get_todos() -> dict:
 
 @app.post("/todo", tags=["todos"])
 async def add_todo(todo: dict) -> dict:
-    todos.append(todo)
+    prompt = build_prompt(todo["item"])
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user", "content": prompt},
+        ],
+        max_tokens=250,
+        temperature=0.2,
+    )
+    todos.append(response.choices[0]["message"]["content"])
     return {
         "data": { "Todo added." }
     }
