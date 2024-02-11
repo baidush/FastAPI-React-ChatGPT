@@ -1,26 +1,18 @@
-# Developing a Single Page App with FastAPI and React
+# FastAPI with ChatGPT integration and React
 
-### Want to learn how to build this?
-
-Check out the [post](https://testdriven.io/blog/fastapi-react/).
-
-## Want to use this project?
-
-1. Fork/Clone
-
-1. Run the server-side FastAPI app in one terminal window:
+1. Run FastAPI app:
 
     ```sh
     $ cd backend
-    $ python3.9 -m venv env
-    $ source env/bin/activate
+    $ python -m venv env
+    $ source env/bin/activatepip
     (env)$ pip install -r requirements.txt
     (env)$ python main.py
     ```
 
     Navigate to [http://localhost:8000](http://localhost:8000)
 
-1. Run the client-side React app in a different terminal window:
+1. Run React app:
 
     ```sh
     $ cd frontend
