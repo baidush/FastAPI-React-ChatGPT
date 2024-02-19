@@ -67,7 +67,9 @@ async def add_todo(todo: dict) -> dict:
         max_tokens=250,
         temperature=0.2,
     )
-    todos.append(response.choices[0]["message"]["content"])
+    todo["item"] = response.choices[0]["message"]["content"]
+    todos.append(todo)
+    print(todo)
     return {
         "data": { "Todo added." }
     }
