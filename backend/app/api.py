@@ -6,10 +6,12 @@ import openai
 todos = [
     {
         "id": "1",
+        "subject": "Reading",
         "item": "Read a book."
     },
     {
         "id": "2",
+        "subject": "Cycling",
         "item": "Cycle around town."
     }
 ]
@@ -58,6 +60,7 @@ async def get_todos() -> dict:
 
 @app.post("/todo", tags=["todos"])
 async def add_todo(todo: dict) -> dict:
+    item = todo["item"]
     prompt = build_prompt(todo["item"])
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -68,6 +71,7 @@ async def add_todo(todo: dict) -> dict:
         temperature=0.2,
     )
     todo["item"] = response.choices[0]["message"]["content"]
+    todo["subject"] = item
     todos.append(todo)
     print(todo)
     return {

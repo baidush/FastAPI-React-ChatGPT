@@ -119,20 +119,57 @@ function DeleteNote({id}) {
   )
 }
 
-function NoteHelper({item, id, fetchNotes}) {
+// function NoteHelper({item, id, fetchNotes}) {
+//   return (
+//     <Box p={1} shadow="sm">
+//       <Flex justify="space-between">
+//         <Text mt={4} as="div">
+//         <NoteDesc item={item}/>
+//           <Flex align="end">
+//             <UpdateNote item={item} id={id} fetchNotes={fetchNotes}/>
+//             <DeleteNote id={id} fetchNotes={fetchNotes}/>
+//           </Flex>
+//         </Text>
+//       </Flex>
+//     </Box>
+//   )
+// }
+
+function NoteHelper({ item, subject, id, fetchNotes }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <Box p={1} shadow="sm">
+      <Flex justify="space-between">
+        <Text mt={4} as="div">
+          <a href="#" onClick={togglePopup}>{subject}</a>
+        </Text>
+      </Flex>
+      <Flex align="end">
+<UpdateNote item={item} id={id} fetchNotes={fetchNotes}/>
+<DeleteNote id={id} fetchNotes={fetchNotes}/>
+      </Flex>
+      {isOpen && (
+        <NoteDesc item={item} />
+      )}
+    </Box>
+  );
+}
+
+function NoteDesc({ item }) {
   return (
     <Box p={1} shadow="sm">
       <Flex justify="space-between">
         <Text mt={4} as="div">
           {item}
-          <Flex align="end">
-            <UpdateNote item={item} id={id} fetchNotes={fetchNotes}/>
-            <DeleteNote id={id} fetchNotes={fetchNotes}/>
-          </Flex>
         </Text>
       </Flex>
     </Box>
-  )
+  );
 }
 
 export default function Notes() {
@@ -150,8 +187,12 @@ export default function Notes() {
       <AddNote />
       <Stack spacing={5}>
         {
-          notes.map((note) => (
-            <NoteHelper item={note.item} id={note.id} fetchNotes={fetchNotes} />
+          notes.map((note, index) => (
+            <ol>
+              <li>
+                <NoteHelper item={note.item} subject={note.subject} id={note.id} fetchNotes={fetchNotes} />
+              </li>
+            </ol>
           ))
         }
       </Stack>
